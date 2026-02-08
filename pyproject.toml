@@ -1,0 +1,14 @@
+[project]
+name = "catsbutler"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "foundry-local-sdk>=0.5.1",
+    "fastapi>=0.115.6",
+    "openai>=2.17.0",
+    "uvicorn>=0.34.0",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+]

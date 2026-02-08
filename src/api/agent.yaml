@@ -1,0 +1,3 @@
+agent:
+  name: leo
+  system_prompt: "You are a personal assistant. You have tools to assist the user. Use them when appropriate."
