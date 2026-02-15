@@ -51,7 +51,7 @@ export default function App() {
   const chat = useChatController(selectedModelId, refreshHistory);
 
   async function refreshAll() {
-    const [state, modelList, appConfig, conversations, mcpConfig, mcpToolsList] = await Promise.all([
+    const results = await Promise.allSettled([
       apiClient.getServiceStatus(),
       apiClient.listModels(),
       apiClient.getConfig(),
@@ -59,15 +59,26 @@ export default function App() {
       apiClient.getMcpConfig(),
       apiClient.listMcpTools(),
     ]);
-    setServiceState(state);
-    setModels(modelList.items);
-    setSelectedModelId(appConfig.selectedModelId);
-    setConfig({
-      maxTokens: appConfig.maxTokens ?? 2048,
+
+    const [state, modelList, appConfig, conversations, mcpConfig, mcpToolsList] = results;
+
+    if (state.status === "fulfilled") setServiceState(state.value);
+    if (modelList.status === "fulfilled") setModels(modelList.value.items);
+    if (appConfig.status === "fulfilled") {
+      setSelectedModelId(appConfig.value.selectedModelId);
+      setConfig({ maxTokens: appConfig.value.maxTokens ?? 2048 });
+    }
+    if (conversations.status === "fulfilled") setHistory(conversations.value.items);
+    if (mcpConfig.status === "fulfilled") setMcpConfigJson(JSON.stringify(mcpConfig.value, null, 2));
+    if (mcpToolsList.status === "fulfilled") setMcpTools(mcpToolsList.value.items);
+
+    // Log any failures for debugging
+    results.forEach((r, i) => {
+      if (r.status === "rejected") {
+        const names = ["serviceStatus", "models", "config", "conversations", "mcpConfig", "mcpTools"];
+        console.warn(`refreshAll: ${names[i]} failed:`, r.reason);
+      }
     });
-    setHistory(conversations.items);
-    setMcpConfigJson(JSON.stringify(mcpConfig, null, 2));
-    setMcpTools(mcpToolsList.items);
   }
 
   useEffect(() => {

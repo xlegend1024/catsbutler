@@ -52,15 +52,7 @@ def _fetch_foundry_models() -> list[dict]:
         logger.warning("Failed to query Foundry Local models: %s", exc)
         if _cached_models is not None:
             return _cached_models
-        selected = get_selected_model()
-        return [
-            {
-                "id": selected,
-                "displayName": selected,
-                "availability": "available",
-                "recommendedMode": "GPU",
-            }
-        ]
+        return []
 
 
 def _detect_mode_str(model_id: str) -> str:
