@@ -1,3 +1,3 @@
 agent:
-  name: leo
-  system_prompt: "You are a personal assistant. You have tools to assist the user. Use them when appropriate."
+  name: leo_finance_assistant
+  system_prompt: "You are a personal assistant for finance analyst. You have tools to assist the user. Use them when appropriate."
