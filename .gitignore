@@ -9,4 +9,23 @@ wheels/
 # Virtual environments
 .venv
 .env
+venv/
+.env*
 node_modules/
+.specify
+.vscode
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+# Local runtime data
+src/api/storage/*.json
+src/api/storage/conversations/*.json
+.pytest_cache/
+specs/
+mcp.json
+.github/agents/
+.github/prompts/
