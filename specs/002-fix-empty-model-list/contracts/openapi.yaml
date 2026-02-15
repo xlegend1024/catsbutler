@@ -1,0 +1,65 @@
+openapi: 3.0.3
+info:
+  title: CatsButler - Model List Fix
+  version: 0.2.0
+  description: Contract changes for 002-fix-empty-model-list
+
+paths:
+  /models:
+    get:
+      summary: List locally cached Foundry models
+      operationId: listModels
+      responses:
+        "200":
+          description: >
+            Returns available models. Items array MAY be empty when no models
+            are cached in Foundry Local. This is NOT an error condition.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelListResponse"
+              examples:
+                withModels:
+                  summary: Models available
+                  value:
+                    items:
+                      - id: "Phi-4-mini-instruct-cuda-gpu:5"
+                        displayName: "Phi-4-mini-instruct-cuda-gpu:5"
+                        availability: available
+                        recommendedMode: GPU
+                emptyList:
+                  summary: No models cached (fresh install)
+                  value:
+                    items: []
+
+components:
+  schemas:
+    ModelListResponse:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: List of cached models. Empty array if none available.
+          items:
+            $ref: "#/components/schemas/ModelProfile"
+
+    ModelProfile:
+      type: object
+      required:
+        - id
+        - displayName
+        - availability
+        - recommendedMode
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        availability:
+          type: string
+          enum: [available, downloading, unavailable]
+        recommendedMode:
+          type: string
+          enum: [NPU, GPU, CPU, unknown]
