@@ -1,4 +1,4 @@
-import { Badge, Dropdown, Option, Text } from "@fluentui/react-components";
+import { Badge, Dropdown, MessageBar, MessageBarBody, Option, Text } from "@fluentui/react-components";
 import type { ModelProfile } from "../../lib/apiClient";
 
 type Props = {
@@ -14,6 +14,26 @@ function modeColor(mode: string): "informative" | "success" | "warning" {
 }
 
 export function ModelSelector({ models, selectedModelId, onSelect }: Props) {
+  if (models.length === 0) {
+    return (
+      <div className="options-block">
+        <Dropdown
+          disabled
+          placeholder="No models available"
+          size="small"
+          value=""
+        />
+        <MessageBar intent="info" style={{ marginTop: 8 }}>
+          <MessageBarBody>
+            <Text size={200}>
+              Download a model using <code>foundry model download &lt;alias&gt;</code> to get started.
+            </Text>
+          </MessageBarBody>
+        </MessageBar>
+      </div>
+    );
+  }
+
   return (
     <div className="options-block">
       <Dropdown
